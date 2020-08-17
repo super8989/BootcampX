@@ -24,3 +24,12 @@ ORDER BY cohort_id DESC;
 SELECT name, email, phone
 FROM students
 WHERE github IS NULL AND end_date IS NOT NULL;
+
+SELECT students.name as student_name, 
+cohorts.name as cohort_name, 
+cohorts.start_date as cohort_start_date, 
+students.start_date as student_start_date
+FROM students
+LEFT JOIN cohorts ON students.cohort_id = cohorts.id
+WHERE cohorts.start_date != students.start_date
+ORDER BY cohorts.start_date;
