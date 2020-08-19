@@ -82,7 +82,55 @@ ORDER BY total_requests DESC;
 
 
 -- Get each day with the total number of assignments and the total duration of the assignments.
-SELECT day, COUNT(assignments) as number_of_assignments, COUNT(duration) as duration
+SELECT day, COUNT(assignments) as number_of_assignments, SUM(duration) as duration
 FROM assignments
 GROUP BY day
 ORDER BY day;
+
+
+-- Get the name of all teachers that performed an assistance request during a cohort.
+SELECT DISTINCT teachers.name as teacher, cohorts.name as cohort
+FROM teachers
+JOIN assistance_requests ON teachers.id = teacher_id
+JOIN students ON students.id = student_id
+JOIN cohorts ON cohorts.id = cohort_id
+WHERE cohorts.name = 'JUL02'
+ORDER BY teacher;
+
+
+-- Perform the same query as before, but include the number of assistances as well.
+SELECT DISTINCT teachers.name as teacher, cohorts.name as cohort, COUNT(assistance_requests) as total_assistances
+FROM teachers
+JOIN assistance_requests ON teachers.id = teacher_id
+JOIN students ON students.id = student_id
+JOIN cohorts ON cohorts.id = cohort_id
+GROUP BY teacher, cohort
+HAVING cohorts.name = 'JUL02' -- could be WHERE 
+ORDER BY teacher;
+
+CREATE TABLE users (
+  id INTEGER PRIMARY KEY,
+  name VARCHAR(255), 
+  birth_year SMALLINT,
+  member_since TIMESTAMP 
+);
+
+INSERT INTO users (name, birth_year)
+VALUES ('Joe', 1990);
+
+INSERT INTO users (name, birth_year)
+VALUES ('Manny', 2000);
+
+INSERT INTO pets (name, owner_id)
+VALUES ('Fluffy', 3);
+
+INSERT INTO pets (name, owner_id)
+VALUES ('Snuggles', 4);
+
+UPDATE pets
+SET owner_id = 2
+WHERE id = 2;
+
+UPDATE pets
+SET owner_id = 2
+WHERE id = 3;
